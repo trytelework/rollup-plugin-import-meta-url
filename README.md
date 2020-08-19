@@ -13,7 +13,7 @@ filename of the script where it is called.
  * @return {object}
  */
 const resolveMetaUrl = () => ({
-  name: 'disablePackages',
+  name: 'resolveMetaUrl',
   resolveImportMeta: (property, chunk) => {
     if (property === 'url') {
       return `'file://${chunk.moduleId}'`;
