@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-disable-packages",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "index.js",
   "repository": "https://github.com/TeleworkInc/rollup-plugin-disable-packages.git",
   "author": "Christian Lewis <hello@trytelework.com>",
@@ -9,7 +9,8 @@
     "@babel/core": "^7.11.1",
     "@babel/generator": "^7.11.0",
     "@babel/parser": "^7.11.3",
-    "@babel/traverse": "^7.11.0"
+    "@babel/traverse": "^7.11.0",
+    "ava": "^3.11.1"
   },
   "scripts": {
     "test": "rollup -c"
