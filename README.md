@@ -1,3 +1,5 @@
-# Rollup AST Plugin Template
-Use `@babel/core` to parse the AST of Rollup modules and transform code chunks
-as needed.
+# Resolve `import.meta.url`
+Replaces import.meta.url with the CJS equivalent of __filename. For use in [gnv
+workspaces](https://github.com/TeleworkInc/gnv), which will always bundle to
+single outputs, and can therefore resolve `import.meta.url` safely to the
+filename of the script where it is called.
