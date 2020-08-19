@@ -1,14 +1,4 @@
-const fsevents = {};
-const chalk = {};
-const blue = {};
-const blueBright = {};
-console.log(chalk.blue('hello'));
-console.log(blue('test'), blueBright('test'));
-const TEST = {
-  a: 42,
-  b: 42
-};
-const TEST_COPY = { ...TEST
-};
-console.log(TEST_COPY);
-console.log(fsevents);
+#!/usr/bin/env node
+const test = "file:///home/christian/Projects/rollup-plugin-import-meta-url/testExports.mjs";
+
+export { test };

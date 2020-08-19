@@ -10,74 +10,48 @@ const babel = require('@babel/core');
 const shebangPattern = /^#!.*/;
 
 /**
- * Example from rollup-plugin-disable-packages, which replaces imports of a
- * given list of packages with empty objects (`{}`).
+ * Modify the AST.
  *
- * @param {...string} disabledPackages
+ * @param {string} moduleId
+ * The abs path to the chunk being parsed.
+ *
  * @return {object}
  */
-const ASTReplacements = (...disabledPackages) => ({
+const transformAst = (moduleId) => ({
   visitor: {
-    CallExpression(path) {
+    MemberExpression(path, state) {
+      const node = path.node;
       if (
-        path.node.callee.name === 'require' &&
-          path.node.arguments.length === 1 &&
-          disabledPackages.includes(path.node.arguments[0].value)
+        node.object.type === 'MetaProperty' &&
+        node.property.name === 'url'
       ) {
-        const newNode = babel.types.objectExpression([]);
+        const newNode = babel.types.stringLiteral(`file://${moduleId}`);
         path.replaceWith(newNode);
-      }
-    },
-    ImportDeclaration(path) {
-      if (
-        path.node.source.type === 'StringLiteral' &&
-          disabledPackages.includes(path.node.source.value)
-      ) {
-        const newNodes = [];
-        for (const specifier of path.node.specifiers) {
-          const disableName = specifier.local.name;
-          const newNode = babel.types.variableDeclaration(
-              'const',
-              [
-                babel.types.variableDeclarator(
-                    babel.types.identifier(disableName),
-                    babel.types.objectExpression([]),
-                ),
-              ],
-          );
-          newNodes.push(newNode);
-        }
-        path.replaceWithMultiple(newNodes);
       }
     },
   },
 });
 
 /**
- * Import `empty` instead of a given module.
- *
- * @param  {...string} disabledPackages
- * The name of the module to disable.
+ * Change `import.meta.url` to the absolute path of the file where it is
+ * referenced.
  *
  * @return {object}
- * The Rollup plugin object.
  */
-const disablePackages = (...disabledPackages) => {
-  return {
-    name: 'disablePackages',
-    renderChunk: (code, chunk, options) => {
-      /**
-       * Handle shebangs which might be in the beginning of files.
-       */
-      code = code.replace(shebangPattern, '');
+const disablePackages = () => ({
+  name: 'disablePackages',
+  transform: (code, id) => {
+    /**
+     * Handle shebangs which might be in the beginning of files.
+     */
+    code = code.replace(shebangPattern, '');
 
-      const output = babel.transformSync(code, {
-        plugins: [ASTReplacements(...disabledPackages)],
-      });
+    const output = babel.transformSync(code, {
+      plugins: [transformAst(id)],
+    });
 
-      return output.code;
-    },
-  };
-};
+    return output.code;
+  },
+});
 
 module.exports = disablePackages;
