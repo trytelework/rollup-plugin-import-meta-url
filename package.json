@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-import-meta-url",
-  "version": "3.0.6",
+  "version": "4.0.0",
   "main": "index.js",
   "repository": "https://github.com/TeleworkInc/rollup-plugin-import-meta-url.git",
   "author": "Christian Lewis <hello@trytelework.com>",
@@ -9,8 +9,7 @@
     "@babel/core": "^7.11.1",
     "@babel/generator": "^7.11.0",
     "@babel/parser": "^7.11.3",
-    "@babel/traverse": "^7.11.0",
-    "ava": "^3.11.1"
+    "@babel/traverse": "^7.11.0"
   },
   "scripts": {
     "build": "rollup -c",
